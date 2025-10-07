@@ -25,5 +25,3 @@ Proje Kullanıcı, Yazar ve Admin Panelli bir Blog sitesidir.
 * Identity ile giriş yapan kişinin verilerini getirme işlemi tamamlandı.
 * Acces Denied sayfası oluşturuldu.
 * Json web token üzerinde duruldu.
-
-Evdi/CoreDemo/blob/master/Proje/33.jpg)
