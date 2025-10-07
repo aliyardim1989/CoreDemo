@@ -1,0 +1,21 @@
+﻿<div class="comment-top">
+    <h4>Bir Yorum Yapın.</h4>
+    <div class="comment-bottom">
+        <form action="/Comment/PartialAddComment/" method="post">
+       @*  <form method="post" asp-action="PartialAddComment"> *@
+
+            <input class="form-control" type="text" name="CommentUserName" placeholder="İsim Soyisim" required="">
+
+            <input class="form-control" type="text" name="CommentTitle" placeholder="Konu" required="">
+
+          @*   <input class="form-control" type="email" name="Email" placeholder="E-Posta" required=""> *@          
+
+            <textarea class="form-control" name="CommentContent" placeholder="Yorumunuz..." required=""></textarea>
+
+            <button type="submit" class="btn btn-primary submit">Gönder</button>
+        </form>
+    </div>
+</div>
+
+
+

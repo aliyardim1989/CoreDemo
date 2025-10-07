@@ -1,0 +1,173 @@
+﻿
+@{
+    ViewData["Title"] = "IndexDeneme";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+
+<div class="col-12 pl-0">
+    <div class="content px-4 py-4 bg-gray iln">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h5 class="d-inline-block text-white mb-0 mt-2">Havuz</h5>
+                <div class="float-right">
+                    <div class="custom-control custom-checkbox mr-sm-2 float-left mt-2">
+                        <input type="checkbox" class="custom-control-input" id="check2">
+                        <label class="custom-control-label text-gray" for="check2">Sadece çevrimiçi kişileri göster</label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <form asp-action="FilterAndSort" asp-area="Master" asp-controller="Havuz" data-ajax="true" data-ajax-method="GET" data-ajax-begin="OnBeginFilter"
+              data-ajax-failure="OnFailureFilter" data-ajax-success="OnSuccessFilter" data-ajax-complete="OnCompleteFilter"
+              class="d-flex flex-column justify-content-end h-100" id="filterForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="refreshview" value="dairelercardview" />
+            <input type="hidden" name="pagesize" id="pageSize" value="@ViewBag.pageSize" />
+            <input type="hidden" name="pagenumber" id="pageNumber" value="@Model.currentpage" />
+            <input type="hidden"  />
+            <div class="row iln-filter">
+                <div class="col-sm-4 col-md-3 iln-search">
+                    <div class="input-group mb-4 p-1">
+                        <div class="input-group-prepend border-0">
+                            <button type="button" class="btn btn-link text-white"><i class="fa fa-search"></i></button>
+                        </div>
+                        <input  type="search" placeholder="Tasarım" class="form-control bg-none border-0 pl-0">
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-3">
+                    <div class="form-group money-select">
+                        <select class="form-control-select2 form-control form-control-lg w-100">
+                            <option>Fiyat</option>
+                            <option value="1000"> 1.000TL </option>
+                            <option value="5000"> 5.000TL </option>
+                            <option value="10000"> 10.000TL </option>
+                            <option value="25000"> 25.000TL </option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-3">
+                    <div class="form-group day-select">
+                        <select class="form-control-select2 form-control form-control-lg w-100">
+                            <option>Tarih</option>
+                            <option value="3">3 Gün</option>
+                            <option value="7">1 Hafta</option>
+                            <option value="30">1 Ay</option>
+                            <option value="90">3 Ay</option>
+                            <option value="365">1 Sene</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-2">
+                    <div class="form-group location-select">
+                        <select class="form-control-select2 form-control form-control-lg w-100">
+                            <option>Lokasyon</option>
+                            @await Component.InvokeAsync("DropDownList", new
+                                {
+                                    displayNameField = "iladi"
+                                     ,
+                                    tableName = "iller"
+                                     ,
+                                    whereField = "ilkod"
+                                     ,
+                                    whereID = ""
+                                     ,
+                                    valueField = "ilkod"
+                                     ,
+                                    selectedValue = Model.prmilkod
+                                     ,
+                                    orderField = "ilkod"
+                                })
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-1">
+                    <button type="submit" id="btnHavuzFiltrele" class="btn btn-orange filter-btn">Filtrele</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="text-white">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="isotope-filters">
+                        <ul class="clearfix">
+                            <li><button class="btn btn-orange btnSecim mb-2" data-kategoriid="0">Tümü</button></li> @* class="is-checked"*@
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="1">Mimari</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="2">Statik</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="3">Elektrik</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="4">Mekanik</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="5">Harita (Hus)</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="6">Zemin Etüdü (Jeoloji)</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="7">Şantiye Şefi</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="8">Yapı Denetim</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="9">EKB</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="10">Akustik</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="11">Müteahhit</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="13">Takım Proje</button></li>
+                            <li><button class="btn btn-black btnSecim mb-2" data-kategoriid="12">Diğer</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+               @*  <div class="col-md-12" id="cardView@_page" style="min-height:500px !important;">
+                    @await Html.PartialAsync("_ViewAll", Model)
+                </div> *@
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/globalfiltering.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.form-control-select2').select2({
+            width: '100%',
+            placeholder: 'Seçim Yapınız...'
+        });
+
+        var seciliKategoriId = $("#prmkategoriid").val();
+
+        // Seçili butonu bulun ve 'selected-job' sınıfını ekleyin
+        var seciliButton = $('.btnSecim[data-kategoriid="' + seciliKategoriId + '"]');
+        if (seciliButton.length > 0) {
+            // Diğer butonları rengini btn-black yap
+            var buttons = $("button.btn.btnSecim");
+            buttons.removeClass("btn-orange").addClass("btn-black");
+
+            seciliButton.removeClass('btn-black').addClass('btn-orange');
+        }
+    });
+
+    var seciliKategori = null;
+    var buttons = $("button.btn.btnSecim");
+
+    buttons.on("click", function () {
+        var kategoriId = $(this).data('kategoriid');
+        // Diğer butonları rengini btn-black yap
+        //buttons.removeClass("btn-orange").addClass("btn-black");
+
+        // Eğer seçilen buton zaten tıklanmışsa, seçimi kaldır
+        if (seciliKategori === kategoriId) {
+            seciliKategori = null;
+        } else {
+            // Aksi takdirde, seçili butonu vurgula
+            //alert(kategoriId);
+
+            // Tıklanan butonun rengini btn-orange yap
+            $(this).removeClass("btn-black").addClass("btn-orange");
+
+            // Seçilen kategori kimliğini kullanmak için kategoriId'yi kullanabilirsiniz
+            var prmkategoriid = $("#prmkategoriid");
+            prmkategoriid.val(kategoriId);
+
+            // Submit işlemini tetikle
+            var submitButton = $("#btnHavuzFiltrele");
+            submitButton.click();
+        }
+    });
+</script>
+
